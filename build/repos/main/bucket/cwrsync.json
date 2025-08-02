@@ -1,0 +1,27 @@
+{
+    "version": "6.4.4",
+    "description": "rsync is a file transfer program capable of efficient remote update via a fast differencing algorithm.",
+    "homepage": "https://itefix.net/cwrsync",
+    "license": "https://itefix.net/simplified-bsd-license",
+    "architecture": {
+        "64bit": {
+            "url": "https://itefix.net/download/free/cwrsync_6.4.4_x64_free.zip",
+            "hash": "b425110d534f6b52d59220eddea8f3ddc0c0f1ae8c32abfebed0630eb07920b0"
+        }
+    },
+    "bin": "bin\\rsync.exe",
+    "checkver": {
+        "url": "https://itefix.net/cwrsync/client/downloads",
+        "regex": "cwrsync_([\\d.]+)_x64_free\\.zip"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://itefix.net/download/free/cwrsync_$version_x64_free.zip",
+                "hash": {
+                    "url": "$url.sha256.asc"
+                }
+            }
+        }
+    }
+}

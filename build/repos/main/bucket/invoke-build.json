@@ -1,0 +1,17 @@
+{
+    "version": "5.14.14",
+    "description": "Build Automation in PowerShell",
+    "homepage": "https://github.com/nightroman/Invoke-Build",
+    "license": "Apache-2.0",
+    "url": "https://nuget.org/api/v2/package/Invoke-Build/5.14.14#/dl.7z",
+    "hash": "c8ddc9416d01217f56dc252bc4f9d84d485c0f9abbea67bdf380416b2b2f9066",
+    "extract_dir": "tools",
+    "env_add_path": ".",
+    "checkver": {
+        "url": "https://github.com/nightroman/Invoke-Build/tags",
+        "regex": "releases/tag/v([\\d.]+)"
+    },
+    "autoupdate": {
+        "url": "https://nuget.org/api/v2/package/Invoke-Build/$version#/dl.7z"
+    }
+}
