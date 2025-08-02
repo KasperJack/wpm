@@ -12,7 +12,7 @@ import (
 func Install(software string) {
 
 	expectedFile := software + ".json"
-	targetPath := filepath.Join(config.LOCAL_MAIN, expectedFile)
+	targetPath := filepath.Join(config.LOCAL_MAIN_BUCKET, expectedFile)
 
 
 	_, err := os.Stat(targetPath)
@@ -24,15 +24,34 @@ func Install(software string) {
 
 	}else{
 		 // ---------> check if repo updated 
-		//update main repo from github
-		//check again
+		if isLocalRepoUpToDate(config.LOCAL_MAIN_REPO){
+			fmt.Println("sfoware does not exist")
+		}else{
 
-		repo, err := git.PlainOpen(".")
+				//update main repo from github
+				//check again
+		}
+
+
+
+
+	}
+}
+
+
+
+
+
+
+func isLocalRepoUpToDate (repoPath string) bool{
+
+
+	repo, err := git.PlainOpen(repoPath)
 	if err != nil {
 		log.Fatalf("Could not open repo: %v", err)
 	}
 
-	// Get local HEAD
+	// get local HEAD
 	headRef, err := repo.Head()
 	if err != nil {
 		log.Fatalf("Could not get HEAD: %v", err)
@@ -40,18 +59,18 @@ func Install(software string) {
 	localHash := headRef.Hash()
 	fmt.Println("Local HEAD:", localHash)
 
-	// Fetch latest from remote (but don't update local branches yet)
+	// fetch latest from remote (but don't update local branches yet)
 	err = repo.Fetch(&git.FetchOptions{
 		RemoteName: "origin",
-		// You can set `Progress: os.Stdout` to debug
+		//Progress: os.Stdout,
 		// set Force: true if you want to always fetch (ignores "already up to date")
-		Force: true,
+		//Force: true,
 	})
 	if err != nil && err != git.NoErrAlreadyUpToDate {
 		log.Fatalf("Fetch failed: %v", err)
 	}
 
-	// Get remote branch reference
+	// get remote branch reference
 	remoteRef, err := repo.Reference(plumbing.ReferenceName("refs/remotes/origin/main"), true)
 	if err != nil {
 		log.Fatalf("Could not get remote ref: %v", err)
@@ -59,17 +78,15 @@ func Install(software string) {
 	remoteHash := remoteRef.Hash()
 	fmt.Println("Remote HEAD:", remoteHash)
 
-	// Compare hashes
 	if localHash == remoteHash {
 		fmt.Println("✅ Local repo is up to date with origin/main.")
+		return true
 	} else {
 		fmt.Println("❌ Local repo is NOT up to date.")
+		return false
 	}
 
 
-	}
 
 
 }
-
-
