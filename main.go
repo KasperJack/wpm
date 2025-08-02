@@ -9,6 +9,6 @@ import (
 func main(){
 
 	fmt.Println("gg")
-	install.Install("air")
+	install.Install("airhf")
 
 }
