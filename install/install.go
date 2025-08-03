@@ -1,12 +1,15 @@
 package install
+
 import (
 	"PackageManager/config"
-	"os"
-	"path/filepath"
-	"github.com/go-git/go-git/v6"
-	"github.com/go-git/go-git/v6/plumbing"
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
+	"time"
+
+	"github.com/go-git/go-git/v6"
+	"github.com/go-git/go-git/v6/plumbing"
 )
 
 func Install(software string) {
@@ -62,14 +65,16 @@ func isLocalRepoUpToDate (repoPath string) bool{
 	fmt.Println("Local HEAD:", localHash) */
 
 	// fetch latest from remote (but don't update local branches yet)
+	start := time.Now()
 	err = repo.Fetch(&git.FetchOptions{
 		RemoteName: "origin",
 		Depth: 1,
+		Progress:   os.Stdout,
 		//Progress: os.Stdout,
 		// set Force: true if you want to always fetch (ignores "already up to date")
 		//Force: true,
 	})
-
+	fmt.Println("Fetch took:", time.Since(start))
 
 	if err != nil && err != git.NoErrAlreadyUpToDate {
 
@@ -78,7 +83,7 @@ func isLocalRepoUpToDate (repoPath string) bool{
 
 
 
-	if err == git.NoErrAlreadyUpToDate {
+	if err == git.NoErrAlreadyUpToDate { // localHash == remoteHas ? 
 		fmt.Println("✅ Remote is already up to date.")
 		return true
 	
