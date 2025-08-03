@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"github.com/go-git/go-git/v6"
-	//"github.com/go-git/go-git/v6/plumbing"
+	"github.com/go-git/go-git/v6/plumbing"
 	"fmt"
 	"log"
 )
@@ -30,6 +30,7 @@ func Install(software string) {
 
 				//update main repo from github
 				//check again
+				fmt.Println("trying to install the sofware again")
 		}
 
 
@@ -82,7 +83,7 @@ func isLocalRepoUpToDate (repoPath string) bool{
 		return true
 	
 	} else {
-		fmt.Println("📦 Remote has new updates.")
+		updateRepoIfNeeded(repo)
 		return false
 	}
 
@@ -117,9 +118,38 @@ func isLocalRepoUpToDate (repoPath string) bool{
 
 
 
-func updateLocalRepo(){
+func updateRepoIfNeeded(repo *git.Repository) {
+	fmt.Println("📦 Updates found. Fast-forwarding local branch...")
 
+	// Get remote main ref (origin/main)
+	remoteRef, err := repo.Reference(plumbing.ReferenceName("refs/remotes/origin/main"), true)
+	if err != nil {
+		log.Fatalf("Could not get origin/main: %v", err)
+	}
 
+	// Update local main branch ref
+	err = repo.Storer.SetReference(plumbing.NewHashReference(
+		plumbing.ReferenceName("refs/heads/main"),
+		remoteRef.Hash(),
+	))
+	if err != nil {
+		log.Fatalf("Failed to fast-forward local main: %v", err)
+	}
 
-		
+	// Reset working tree (i.e., "pull" the update)
+	wt, err := repo.Worktree()
+	if err != nil {
+		log.Fatalf("Could not get working tree: %v", err)
+	}
+
+	err = wt.Reset(&git.ResetOptions{
+		Mode:   git.HardReset,
+		Commit: remoteRef.Hash(),
+	})
+	if err != nil {
+		log.Fatalf("Failed to reset working tree: %v", err)
+	}
+
+	fmt.Println("✅ Local main and working tree are now up to date with origin/main.")
 }
+
