@@ -63,6 +63,7 @@ func isLocalRepoUpToDate (repoPath string) bool{
 	// fetch latest from remote (but don't update local branches yet)
 	err = repo.Fetch(&git.FetchOptions{
 		RemoteName: "origin",
+		Depth: 1,
 		//Progress: os.Stdout,
 		// set Force: true if you want to always fetch (ignores "already up to date")
 		//Force: true,
