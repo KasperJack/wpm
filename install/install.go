@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"github.com/go-git/go-git/v6"
-	"github.com/go-git/go-git/v6/plumbing"
+	//"github.com/go-git/go-git/v6/plumbing"
 	"fmt"
 	"log"
 )
@@ -51,13 +51,14 @@ func isLocalRepoUpToDate (repoPath string) bool{
 		log.Fatalf("Could not open repo: %v", err)
 	}
 
+	/*
 	// get local HEAD
 	headRef, err := repo.Head()
 	if err != nil {
 		log.Fatalf("Could not get HEAD: %v", err)
 	}
 	localHash := headRef.Hash()
-	fmt.Println("Local HEAD:", localHash)
+	fmt.Println("Local HEAD:", localHash) */
 
 	// fetch latest from remote (but don't update local branches yet)
 	err = repo.Fetch(&git.FetchOptions{
@@ -66,11 +67,31 @@ func isLocalRepoUpToDate (repoPath string) bool{
 		// set Force: true if you want to always fetch (ignores "already up to date")
 		//Force: true,
 	})
+
+
 	if err != nil && err != git.NoErrAlreadyUpToDate {
+
 		log.Fatalf("Fetch failed: %v", err)
 	}
 
-	// get remote branch reference
+
+
+	if err == git.NoErrAlreadyUpToDate {
+		fmt.Println("✅ Remote is already up to date.")
+		return true
+	
+	} else {
+		fmt.Println("📦 Remote has new updates.")
+		return false
+	}
+
+
+
+
+
+
+	/*
+	// get remote branch reference //updating the local ref 
 	remoteRef, err := repo.Reference(plumbing.ReferenceName("refs/remotes/origin/main"), true)
 	if err != nil {
 		log.Fatalf("Could not get remote ref: %v", err)
@@ -79,12 +100,12 @@ func isLocalRepoUpToDate (repoPath string) bool{
 	fmt.Println("Remote HEAD:", remoteHash)
 
 	if localHash == remoteHash {
-		fmt.Println("✅ Local repo is up to date with origin/main.")
+		fmt.Println("✅ Local repo is up to date with origin/main.")	
 		return true
 	} else {
 		fmt.Println("❌ Local repo is NOT up to date.")
 		return false
-	}
+	}*/
 
 
 
