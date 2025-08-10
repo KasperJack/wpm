@@ -41,7 +41,7 @@ func parseJson(filePath string){
 	// Example usage
 	fmt.Println("Version:", m.Version)
 	fmt.Println("Download URL:", m.Arch.X64.URL)
-	fmt.Println(m.)
+	//fmt.Println(m.)
 
 
 }

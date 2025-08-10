@@ -16,12 +16,12 @@ func main(){
 
 
 	if (os.Args[1] == "install") {
-		install.Install("test")
 
+		install.Install(os.Args[2])
 
 	}else if(os.Args[1] == "update"){
 
-		install.UpdateLocalRepo()
+		install.Install("f")
 
 	}
 	

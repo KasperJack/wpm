@@ -2,10 +2,10 @@ package install
 
 import (
 	"PackageManager/config"
+	"PackageManager/git"
 	"fmt"
-	"log"
+	//"log"
 	"os"
-	"os/exec"
 	"path/filepath"
 
 
@@ -58,13 +58,8 @@ func Install(software string) {
 func isLocalRepoUpToDate () bool{
 
 
-	fetchDry := exec.Command(config.GIT,"fetch", "--dry-run", "origin")
-	fetchDry.Dir = config.LOCAL_MAIN_REPO
-	
-	output, err := fetchDry.CombinedOutput()
-    if err != nil {
-        log.Fatal(err)
-    }
+	output := git.FetchDry(config.LOCAL_MAIN_REPO)
+
 
 	if (len(output) == 0){
 		fmt.Println("local repo up to date")
@@ -77,42 +72,21 @@ func isLocalRepoUpToDate () bool{
 
 
 
-
 }
 
 
 
 
 
-func UpdateLocalRepo() {
+func updateLocalRepo() {
 
 	//fetch
-	fetch := exec.Command(config.GIT,"fetch", "origin")
-	fetch.Dir = config.LOCAL_MAIN_REPO
-	
-    fetch.Stdout = os.Stdout
-    fetch.Stderr = os.Stderr
-    if err := fetch.Run(); err != nil {
-        fmt.Println("Fetch failed:", err)
-        return
-    }
+	git.Fetch(config.LOCAL_MAIN_REPO)
 
 
 	//pull
 
-
-	pull := exec.Command(config.GIT, "pull", "origin", "main")
-    pull.Dir = config.LOCAL_MAIN_REPO
-    pull.Stdout = os.Stdout
-    pull.Stderr = os.Stderr
-
-    if err := pull.Run(); err != nil {
-        fmt.Println("Pull failed:", err)
-        return
-    }
-
-
-
+	git.Pull(config.LOCAL_MAIN_REPO)
 
 
 }
