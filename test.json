@@ -1,9 +1,11 @@
 {
-    "source": "github",
+    "source": "open-web",
     "description": "Resource monitor that shows usage and stats for processor, memory, disks, network, processes and services (LibreHardwareMonitor version with full monitoring capabilities).",
     "homepage": "https://github.com/aristocratos/btop4win",
     "license": "Apache-2.0",
     "notes": "This application requires admin rights to run.",
+
+    "64bit" : true,
 
 
     "arch": {
